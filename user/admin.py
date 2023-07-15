@@ -11,3 +11,6 @@ class UserModelAdmin(admin.ModelAdmin):
     # ordering=('username')
 
 admin.site.register(CustomUser, UserModelAdmin)
+
+admin.site.site_title='Адиин панел'
+admin.site.site_header='Адиин панел'

@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
                               error_messages={
                                "unique": _("A user with that email already exists."),
                                 },)
-    phone = models.CharField(max_length=13, null=True, blank=True)
+    phone_number = models.CharField(max_length=13, null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     birthday = models.DateField(null=True, blank=True)
     is_superuser = models.BooleanField(
@@ -36,8 +36,12 @@ class CustomUser(AbstractUser):
     )
     time_create = models.DateTimeField(auto_now_add=True, null=True)  # time when car has created
     time_update = models.DateTimeField(auto_now=True)  # time when car has updated
-    
-    
+    is_staff = models.BooleanField(_("staff user"), default=False)
+    balance = models.FloatField(null=True, blank=True)
+    adress = models.CharField(max_length=155, null=True, blank=True)
+    description = models.CharField(max_length=350, null=True, blank=True)
+
+
     ordering = ('email',)
 
     REQUIRED_FIELDS = ['username']
@@ -47,11 +51,6 @@ class CustomUser(AbstractUser):
         ordering = ['id']
         verbose_name = "Пользовател"
         verbose_name_plural = "Пользователи"
-        index_together = ["username", "email"]
-        # indexes = [
-            # models.Index(fields=['last_name', 'first_name']),
-            # models.Index(fields=['first_name'], name='first_name_idx'),
-        # ]
 
     def __str__(self):
         return self.email
