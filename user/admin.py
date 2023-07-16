@@ -13,5 +13,5 @@ class UserModelAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomUser, UserModelAdmin)
 
-admin.site.site_title='Адиин панел'
-admin.site.site_header='Адиин панел'
+# admin.site.site_title='Адиин панел'
+# admin.site.site_header='Адиин панел'

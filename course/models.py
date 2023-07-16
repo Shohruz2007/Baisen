@@ -23,8 +23,8 @@ class Course(TranslatableModel):
     time_create = models.DateTimeField(auto_now_add=True, null=True)  
     time_update = models.DateTimeField(auto_now=True)  
     course_type = models.ForeignKey(CourseType, on_delete=models.CASCADE, related_name='type')
-    manager = models.ManyToManyField(CustomUser)
-    image = models.ImageField(upload_to='Courses/main')
+    user = models.ManyToManyField(CustomUser)
+    image = models.ImageField(upload_to='Courses/main', null=True, blank=True)
     
 class CourseDataCategory(TranslatableModel):
     translations = TranslatedFields(

@@ -45,9 +45,10 @@ class CourseViewset(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
-    @method_decorator(cache_page(90))
     
+
     def list(self, request, *args, **kwargs):
+        print('Accept-Language' in request.headers,'######' , request.headers)
         accept_language='en'
         if 'Accept-Language' in request.headers:
             accept_language = str(request.headers['Accept-Language'])
@@ -67,7 +68,6 @@ class CourseDataCategoryViewset(viewsets.ModelViewSet):
     serializer_class = CourseDataCategorySerializer
     queryset = CourseDataCategory.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
-    @method_decorator(cache_page(90))
     
     def list(self, request, *args, **kwargs):
         accept_language='en'
@@ -89,7 +89,6 @@ class CourseDataSubCategoryViewset(viewsets.ModelViewSet):
     serializer_class = CourseDataSubCategorySerializer
     queryset = CourseDataSubCategory.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
-    @method_decorator(cache_page(90))
     
     def list(self, request, *args, **kwargs):
         accept_language='en'
@@ -111,8 +110,8 @@ class CourseDataThemeViewset(viewsets.ModelViewSet):
     serializer_class = CourseDataThemeSerializer
     queryset = CourseDataTheme.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
-    @method_decorator(cache_page(90))
     
+    @method_decorator(cache_page(60))
     def list(self, request, *args, **kwargs):
         accept_language='en'
         if 'Accept-Language' in request.headers:
@@ -133,7 +132,6 @@ class CourseThemeTaskViewset(viewsets.ModelViewSet):
     serializer_class = CourseThemeTaskSerializer
     queryset = CourseThemeTask.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
-    @method_decorator(cache_page(90))
     
     def list(self, request, *args, **kwargs):
         accept_language='en'

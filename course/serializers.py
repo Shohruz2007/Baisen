@@ -13,11 +13,9 @@ class CourseTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class CourseSerializer(serializers.ModelSerializer):
-    user = UserBaseInfoSerializer()
-    course_type = CourseTypeSerializer()
     class Meta:
         model = Course
-        fields = ['id','name','description','price','planned_time','time_create','time_update','course_type','manager','image',]
+        fields = ['id', 'name', 'description', 'price', 'planned_time', 'time_create', 'time_update', 'course_type', 'user', 'image']
 
 class CourseDataCategorySerializer(serializers.ModelSerializer):
 
