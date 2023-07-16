@@ -34,8 +34,8 @@ class CustomUser(AbstractUser):
             "explicitly assigning them."
         ),
     )
-    time_create = models.DateTimeField(auto_now_add=True, null=True)  # time when car has created
-    time_update = models.DateTimeField(auto_now=True)  # time when car has updated
+    time_create = models.DateTimeField(auto_now_add=True, null=True)  
+    time_update = models.DateTimeField(auto_now=True)  
     is_staff = models.BooleanField(_("staff user"), default=False)
     balance = models.FloatField(null=True, blank=True)
     adress = models.CharField(max_length=155, null=True, blank=True)
@@ -55,3 +55,13 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+class ConnectToUser(models.Model):
+    email = models.EmailField(null=True, blank=True)
+    phone_number = models.CharField(max_length=13)
+    comment = models.TextField(null=True, blank=True)
+
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = "Запрос на обратную связь"
+        verbose_name_plural = "Запросы на обратную связь"

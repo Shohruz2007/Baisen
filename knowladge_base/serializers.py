@@ -1,6 +1,22 @@
 from rest_framework import serializers
-from .models import *
-from parler.models import TranslatableModel, TranslatedFields
+from .models import BaseTheme, KnowladgeBase
+from user.serializers import UserBaseInfoSerializer
 
-class BaseThemeSerializer(TranslatableModel):
-    pass
+from parler_rest.serializers import TranslatableModelSerializer
+from parler_rest.fields import TranslatedFieldsField
+
+class BaseThemeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BaseTheme
+        fields = ['id', 'name']
+
+
+class KnowladgeBaseSerializer(TranslatableModelSerializer):
+    theme = BaseThemeSerializer()
+    author = UserBaseInfoSerializer()
+
+    class Meta:
+        model = KnowladgeBase
+        fields = ['name','description','image','link','theme','author','time_create','time_update',]
+

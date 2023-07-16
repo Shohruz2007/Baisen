@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from django.contrib.auth import get_user_model, authenticate, login
 from django.core.mail import send_mail
 from django.conf import settings
@@ -19,7 +20,6 @@ from .models import *
 from .serializers import *
 
 
-
 class RegisterAPIView(CreateAPIView):
     queryset = CustomUser.objects.all()
     http_method_names = ["post"]
@@ -27,11 +27,10 @@ class RegisterAPIView(CreateAPIView):
     permission_classes = [AllowAny]
 
     def send_email(self, data):
-
         email = data["email"]
         name = data["username"]
         code = data["verify_code"]
-        
+
         message = f"""Hi {name}!. 
                     Here your verification code:{code}
                     """
@@ -43,50 +42,56 @@ class RegisterAPIView(CreateAPIView):
             [email],
             fail_silently=False,
         )
-    
+
     def create_code(self, data):
-        
         total = string.digits
         verify_code = "".join(random.sample(total, 6))
 
         data_copy = data.copy()
-        data_copy.update({"verify_code":int(verify_code)})
+        data_copy.update({"verify_code": int(verify_code)})
 
         return data_copy
 
-
     def post(self, request, *args, **kwargs):
-
-        code = request.query_params.get('verify_code')
+        code = request.query_params.get("verify_code")
         if code is not None:
-            params_email = request.query_params.get('email')
-
+            params_email = request.query_params.get("email")
             user_verification_model = VerificationModel.objects.get(email=params_email)
 
-
             if int(code) == user_verification_model.verify_code:
-                register_data = {"email":user_verification_model.email,'username':user_verification_model.username,'password':user_verification_model.password}
+                register_data = {
+                    "email": user_verification_model.email,
+                    "username": user_verification_model.username,
+                    "password": user_verification_model.password,
+                }
                 serializer = self.serializer_class(data=register_data)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
                     return Response(status=status.HTTP_201_CREATED)
             return Response(status=status.HTTP_409_CONFLICT)
-        
-        try:
-            verification = VerificationModel.objects.filter(email=request.data['email']).first()
-        except:
-            verification = VerificationModel.objects.filter(email=request.query_params.get('email')).first()
 
-        if verification or request.query_params.get('resend_code') is not None:
-            data = {"username":verification.username, "email":verification.email, "password":verification.password}
+        try:
+            verification = VerificationModel.objects.filter(
+                email=request.data["email"]
+            ).first()
+        except:
+            verification = VerificationModel.objects.filter(
+                email=request.query_params.get("email")
+            ).first()
+
+        if verification or request.query_params.get("resend_code") is not None:
+            data = {
+                "username": verification.username,
+                "email": verification.email,
+                "password": verification.password,
+            }
             data_with_code = self.create_code(data)
             self.send_email(data_with_code)
-            
-            verification.verify_code = data_with_code['verify_code']
+
+            verification.verify_code = data_with_code["verify_code"]
             verification.save()
             return Response(status=status.HTTP_200_OK)
-        
-        
+
         new_data = self.create_code(request.data)
         serializer_class = VerificationSerializer
         serializer = serializer_class(data=new_data)
@@ -94,7 +99,9 @@ class RegisterAPIView(CreateAPIView):
         if serializer.is_valid(raise_exception=True):
             self.send_email(new_data)
             serializer.save()
-            return Response(status=status.HTTP_200_OK,)
+            return Response(
+                status=status.HTTP_200_OK,
+            )
 
 
 class LoginAPIView(generics.GenericAPIView):
@@ -112,7 +119,9 @@ class LoginAPIView(generics.GenericAPIView):
         user = authenticate(username=email, password=password)
         if user:
             login(request, user)
-            return Response(self.get_tokens_for_user(user), status=status.HTTP_202_ACCEPTED)
+            return Response(
+                self.get_tokens_for_user(user), status=status.HTTP_202_ACCEPTED
+            )
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def get_tokens_for_user(self, user):  # getting JWT token and is_staff boolean
@@ -145,7 +154,7 @@ class ChangePasswordView(UpdateAPIView):
                     {"old_password": ["Wrong password."]},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-                
+
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
@@ -160,14 +169,38 @@ class ChangePasswordView(UpdateAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class CurrentUserView(generics.RetrieveAPIView):
+    @method_decorator(cache_page(90))
     def get(self, request):
         if not request.user.is_anonymous:
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
-        return Response({'error':'token is not valid or not exists'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {"error": "token is not valid or not exists"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
-class AdminUserView(viewsets.ModelViewSet):
+
+class AdminUserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [IsAdminUser]
+
+    @method_decorator(cache_page(360))
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class ConnectToUserViewset(viewsets.ModelViewSet):
+    queryset = ConnectToUser.objects.all()
+    serializer_class = ConnectToUserSerializer
+    permission_classes = (AllowAny,)

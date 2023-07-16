@@ -13,7 +13,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('user.urls')),
-    path('base/', include('knowladge_base.urls')),
+    path('knowladge_base/', include('knowladge_base.urls')),
+    path('course/', include('course.urls')),
 
     path("__debug__/", include("debug_toolbar.urls")),
 

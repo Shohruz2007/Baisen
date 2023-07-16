@@ -36,3 +36,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+class UserBaseInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'phone_number', 'username']
+
+class ConnectToUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConnectToUser
+        fields = ['id', 'email', 'phone_number', 'comment']
