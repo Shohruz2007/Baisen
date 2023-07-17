@@ -150,7 +150,7 @@ class CourseThemeTaskViewset(viewsets.ModelViewSet):
 
 
 class CourseThemeComment(viewsets.ModelViewSet):
-    queryset = CourseThemeComment.objects.all()
+    queryset = CourseThemeComment.objects.select_related('user').all()
     serializer_class = CourseThemeCommentSerializer
     permission_classes = (IsAuthenticated,) 
 

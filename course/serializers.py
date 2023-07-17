@@ -13,6 +13,8 @@ class CourseTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class CourseSerializer(serializers.ModelSerializer):
+    user = UserBaseInfoSerializer()
+    
     class Meta:
         model = Course
         fields = ['id', 'name', 'description', 'price', 'planned_time', 'time_create', 'time_update', 'course_type', 'user', 'image']
@@ -42,7 +44,7 @@ class CourseThemeTaskSerializer(serializers.ModelSerializer):
         fields = ['id','content','course_theme','image']
 
 class CourseThemeCommentSerializer(serializers.ModelSerializer):
-
+    user = UserBaseInfoSerializer()
     class Meta:
         model = CourseThemeComment
         fields = ['id','user','image','text','subcomment']
