@@ -64,7 +64,7 @@ class CourseThemeTask(TranslatableModel):
 
 class CourseThemeComment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
-    image = models.ImageField(upload_to='Course/theme/comment')
+    image = models.ImageField(upload_to='Course/theme/comment', null=True, blank=True)
     text = models.TextField()
     subcomment = models.ForeignKey('self',on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -78,4 +78,4 @@ class RegisterCourseUser(models.Model):
     proposed_time = models.DateTimeField(null=True, blank=True)
     completed_themes = models.ManyToManyField(CourseDataTheme)
     is_manager = models.BooleanField(default=False)
-    rating = models.IntegerField()
+    rating = models.IntegerField(null=True, blank=True)

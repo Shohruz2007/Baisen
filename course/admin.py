@@ -66,29 +66,21 @@ class CourseThemeTaskAdmin(TranslatableAdmin):
         }),
     )
 
-class CourseThemeCommentAdmin(TranslatableAdmin):
-    list_display = ('user','text',)
+class CourseThemeCommentAdmin(admin.ModelAdmin):
+    list_display = ('id','user',)
     readonly_fields = ('id','user',)
-    fieldsets = (
-        (None, {
-            'fields': ('id','image','text','subcomment',),
-        }),
-    )
-        
+    
+    
     def save_model(self, request, obj, form, change):
         obj.user_id = request.user.id
         super().save_model(request, obj, form, change)
+
         
-        
-class RegisterCourseUserAdmin(TranslatableAdmin):
-    list_display = ('user',)
+class RegisterCourseUserAdmin(admin.ModelAdmin):
+    list_display = ('id','user',)
     readonly_fields = ('id','user',)
-    fieldsets = (
-        (None, {
-            'fields': ('id' ,'course','time_create','time_update','is_finished','total_mark','proposed_time','completed_themes','is_manager',),
-        }),
-    )
-        
+
+
     def save_model(self, request, obj, form, change):
         obj.user_id = request.user.id
         super().save_model(request, obj, form, change)
