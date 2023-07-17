@@ -8,10 +8,9 @@ class UserModelAdmin(admin.ModelAdmin):
     list_display_links = ('username','email')
     list_display = ('id','username','email')
     list_filter = ('id',)
-    list_per_page = 1
-    # ordering=('username')
+    list_per_page = 15
+    search_fields = ('id', 'username')
 
 admin.site.register(CustomUser, UserModelAdmin)
 
-# admin.site.site_title='Адиин панел'
-# admin.site.site_header='Адиин панел'
+admin.site.site_title='Адиин панел'
