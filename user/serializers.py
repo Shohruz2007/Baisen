@@ -37,6 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = '__all__'
 
+class UserPutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name','last_name','username','image','phone_number','birthday','balance','adress','description']
+
 class UserBaseInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser

@@ -170,7 +170,9 @@ class ChangePasswordView(UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CurrentUserView(generics.RetrieveAPIView):
+class CurrentUserView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+    
     @method_decorator(cache_page(90))
     def get(self, request):
         if not request.user.is_anonymous:
@@ -180,6 +182,32 @@ class CurrentUserView(generics.RetrieveAPIView):
             {"error": "token is not valid or not exists"},
             status=status.HTTP_404_NOT_FOUND,
         )
+    
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = request.user
+        copy_of_data = request.data.copy()
+
+        if not "username" in request.data:
+            copy_of_data.update({"username":request.user.username})
+
+        serializer = UserPutSerializer(instance, data=copy_of_data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 
 class AdminUserViewset(viewsets.ModelViewSet):
