@@ -53,8 +53,6 @@ class CourseDataTheme(TranslatableModel):
     subcategory = models.ForeignKey(CourseDataSubCategory, on_delete=models.SET_NULL , null=True, blank=True)
 
 
-
-
 class CourseThemeTask(TranslatableModel):
     translations = TranslatedFields(
         content = models.TextField()
@@ -63,6 +61,7 @@ class CourseThemeTask(TranslatableModel):
     image = models.ImageField(upload_to='Course/theme/task/image')
 
 class CourseThemeComment(models.Model):
+    theme = models.ForeignKey(CourseDataTheme, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.ImageField(upload_to='Course/theme/comment', null=True, blank=True)
     text = models.TextField()
