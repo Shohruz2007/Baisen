@@ -51,7 +51,7 @@ class CourseDataTheme(TranslatableModel):
     extra_data = models.FileField(upload_to='Course/theme/extrainfo')
     links = models.URLField(null=True, blank=True)
     subcategory = models.ForeignKey(CourseDataSubCategory, on_delete=models.SET_NULL , null=True, blank=True)
-    rating = mode
+
 
 
 
@@ -70,7 +70,7 @@ class CourseThemeComment(models.Model):
 
 class RegisterCourseUser(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registercourse')
     time_create = models.DateTimeField(auto_now_add=True, null=True)  
     time_update = models.DateTimeField(auto_now=True)  
     is_finished = models.BooleanField(default=False)
@@ -78,3 +78,4 @@ class RegisterCourseUser(models.Model):
     proposed_time = models.DateTimeField(null=True, blank=True)
     completed_themes = models.ManyToManyField(CourseDataTheme)
     is_manager = models.BooleanField(default=False)
+    rating = models.IntegerField()
