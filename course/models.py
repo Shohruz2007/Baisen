@@ -26,17 +26,20 @@ class Course(TranslatableModel):
     user = models.ManyToManyField(CustomUser)
     image = models.ImageField(upload_to='Courses/main', null=True, blank=True)
     
+    
 class CourseDataCategory(TranslatableModel):
     translations = TranslatedFields(
         name = models.CharField(max_length=60, unique=True),
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
 
+
 class CourseDataSubCategory(TranslatableModel):
     translations = TranslatedFields(
         name = models.CharField(max_length=60, unique=True),
     )
     category = models.ForeignKey(CourseDataCategory, on_delete=models.CASCADE)
+
 
 class CourseDataTheme(TranslatableModel):
     translations = TranslatedFields(
@@ -47,6 +50,10 @@ class CourseDataTheme(TranslatableModel):
     video = models.FileField(upload_to='Corse/theme/video', null=True, blank=True)
     extra_data = models.FileField(upload_to='Course/theme/extrainfo')
     links = models.URLField(null=True, blank=True)
+    subcategory = models.ForeignKey(CourseDataSubCategory, on_delete=models.SET_NULL , null=True, blank=True)
+    rating = mode
+
+
 
 class CourseThemeTask(TranslatableModel):
     translations = TranslatedFields(

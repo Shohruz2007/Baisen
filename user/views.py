@@ -183,6 +183,7 @@ class CurrentUserView(generics.RetrieveUpdateDestroyAPIView):
             status=status.HTTP_404_NOT_FOUND,
         )
     
+    
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = request.user

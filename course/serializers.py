@@ -33,7 +33,7 @@ class CourseDataThemeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CourseDataTheme
-        fields = ['id','name','content','image','video','extra_data','links',]
+        fields = ['id','name','content','image','video','extra_data','links','subcategory']
 
 class CourseThemeTaskSerializer(serializers.ModelSerializer):
 

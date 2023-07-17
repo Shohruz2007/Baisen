@@ -53,7 +53,7 @@ class CourseDataThemeAdmin(TranslatableAdmin):
     readonly_fields = ('id',)
     fieldsets = (
         (None, {
-            'fields': ('id','name','content','image','video','links', 'extra_data'),
+            'fields': ('id','name','content','image','video','links', 'extra_data', 'subcategory',),
         }),
     )
 
