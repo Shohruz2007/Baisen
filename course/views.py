@@ -16,8 +16,29 @@ from .serializers import *
 class RegisterCourseUserViewset(viewsets.ModelViewSet):
     queryset = RegisterCourseUser.objects.select_related('user').all()
     serializer_class = RegisterCourseUserSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
+    
+    
+    def create(self, request, *args, **kwargs):
+        custom_data = request.data.copy()
+        custom_data.update({'user':request.user.id})
+        
+        
+        serializer = self.get_serializer(data=custom_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+    
     
 class CourseTypeViewset(viewsets.ModelViewSet):
     serializer_class = CourseTypeSerializer
@@ -57,6 +78,8 @@ class CourseViewset(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+    
 
     
 class CourseDataCategoryViewset(viewsets.ModelViewSet):
