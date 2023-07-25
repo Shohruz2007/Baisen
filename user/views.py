@@ -173,7 +173,7 @@ class ChangePasswordView(UpdateAPIView):
 class CurrentUserView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     
-    @method_decorator(cache_page(90))
+
     def get(self, request):
         if not request.user.is_anonymous:
             serializer = UserSerializer(request.user)
