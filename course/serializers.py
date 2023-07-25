@@ -13,11 +13,11 @@ class CourseTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class CourseSerializer(serializers.ModelSerializer):
-    user = UserBaseInfoSerializer()
+    author = UserBaseInfoSerializer()
     
     class Meta:
         model = Course
-        fields = ['id', 'name', 'description', 'price', 'planned_time', 'time_create', 'time_update', 'course_type', 'user', 'image']
+        fields = ['id', 'name', 'description', 'price', 'planned_time', 'time_create', 'time_update', 'course_type', 'author', 'image']
 
 class CourseDataCategorySerializer(serializers.ModelSerializer):
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BaseTheme, KnowladgeBase
+from .models import BaseTheme, KnowladgeBase, FAQModel
 from user.serializers import UserBaseInfoSerializer
 
 from parler_rest.serializers import TranslatableModelSerializer
@@ -20,3 +20,8 @@ class KnowladgeBaseSerializer(TranslatableModelSerializer):
         model = KnowladgeBase
         fields = ['name','description','image','link','theme','author','time_create','time_update',]
 
+class FAQSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = FAQModel
+        fields = '__all__'

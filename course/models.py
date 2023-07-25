@@ -23,8 +23,8 @@ class Course(TranslatableModel):
     time_create = models.DateTimeField(auto_now_add=True, null=True)  
     time_update = models.DateTimeField(auto_now=True)  
     course_type = models.ForeignKey(CourseType, on_delete=models.CASCADE, related_name='type')
-    user = models.ManyToManyField(CustomUser)
     image = models.ImageField(upload_to='Courses/main', null=True, blank=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     
     
 class CourseDataCategory(TranslatableModel):

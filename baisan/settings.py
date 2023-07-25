@@ -39,20 +39,24 @@ INSTALLED_APPS = [
     'user',
     'knowladge_base',
     'course',
+    'lesson',
+    'chat',
 
     'rest_framework',
     'rest_framework_simplejwt',
 
-
+    'channels',
+    'ws4redis',
+    
     'parler',
     'corsheaders',
     'debug_toolbar',
     'django_cleanup.apps.CleanupConfig',
     
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -90,6 +94,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'baisan.wsgi.application'
 
 
+ASGI_APPLICATION = "baisan.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+WEBSOCKET_URL = '/ws/'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 import os
@@ -111,28 +127,28 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'user.CustomUser'
 
-SITE_ID = 2
+# SITE_ID = 2
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
-]
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend'
+# ]
 
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'SCOPE': [
+#             'profile',
+#             'email',
+#         ],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     }
+# }
 
 
 # Password validation

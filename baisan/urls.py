@@ -15,6 +15,8 @@ urlpatterns = [
     path('auth/', include('user.urls')),
     path('knowladge_base/', include('knowladge_base.urls')),
     path('course/', include('course.urls')),
+    path('education/', include('lesson.urls')),
+    path('chat/', include('chat.urls')),
 
     path("__debug__/", include("debug_toolbar.urls")),
 
@@ -22,7 +24,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     
-    path('accounts/', include('allauth.urls')),
+    # path('accounts/', include('allauth.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -45,7 +45,7 @@ class UserPutSerializer(serializers.ModelSerializer):
 class UserBaseInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'phone_number', 'username']
+        fields = ['id', 'email', 'username', 'image']
 
 class ConnectToUserSerializer(serializers.ModelSerializer):
     class Meta:

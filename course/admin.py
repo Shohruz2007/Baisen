@@ -9,15 +9,15 @@ from .models import *
 
 class CourseAdmin(TranslatableAdmin):
     list_display = ('name','description',)
-    readonly_fields = ('time_create','time_update','user','id')
+    readonly_fields = ('time_create','time_update','author','id')
     fieldsets = (
         (None, {
-            'fields': ('id','name','description','price','planned_time','time_create','time_update','course_type','user','image',),
+            'fields': ('id','name','description','price','planned_time','time_create','time_update','course_type','author','image',),
         }),
     )
     
     def save_model(self, request, obj, form, change):
-        obj.author_id = request.user.id
+        obj.author = request.user.id
         super().save_model(request, obj, form, change)
 
 
@@ -92,5 +92,5 @@ admin.site.register(CourseDataSubCategory, CourseDataSubCategoryAdmin)
 admin.site.register(CourseDataTheme, CourseDataThemeAdmin)
 admin.site.register(CourseThemeComment, CourseThemeCommentAdmin)
 admin.site.register(CourseThemeTask, CourseThemeTaskAdmin)
-admin.site.register(RegisterCourseUser, )
+admin.site.register(RegisterCourseUser, RegisterCourseUserAdmin)
 admin.site.register(CourseType, CourseTypeAdmin)

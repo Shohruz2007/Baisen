@@ -33,3 +33,7 @@ class KnowladgeBase(TranslatableModel):
         ordering = ['id']
         verbose_name = "Темы"
         verbose_name_plural = "Тема"
+        
+class FAQModel(models.Model):
+    question = models.TextField()
+    answer = models.TextField()

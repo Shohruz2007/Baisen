@@ -46,19 +46,14 @@ class CourseViewset(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     permission_classes = [IsAdminUserOrReadOnly]
     
-
+    @method_decorator(cache_page(45))
     def list(self, request, *args, **kwargs):
-        print('Accept-Language' in request.headers,'######' , request.headers)
+
         accept_language='en'
         if 'Accept-Language' in request.headers:
             accept_language = str(request.headers['Accept-Language'])
             
-        queryset = Course.objects.language(accept_language).all()
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        queryset = Course.objects.prefetch_related('translations').language(accept_language)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

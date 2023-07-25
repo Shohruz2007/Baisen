@@ -8,8 +8,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from baisan.permissions import IsAdminUserOrReadOnly
 
-from .models import BaseTheme, KnowladgeBase
-from .serializers import BaseThemeSerializer, KnowladgeBaseSerializer
+from .models import BaseTheme, KnowladgeBase, FAQModel
+from .serializers import BaseThemeSerializer, KnowladgeBaseSerializer, FAQSerializer
 
 class BaseThemeViewset(viewsets.ModelViewSet):
     serializer_class = BaseThemeSerializer
@@ -51,3 +51,8 @@ class KnowladgeBaseViewset(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class FAQViewset(viewsets.ModelViewSet):
+    queryset = FAQModel
+    serializer_class = FAQSerializer
+    permission_classes = [IsAdminUserOrReadOnly]

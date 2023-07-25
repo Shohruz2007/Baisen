@@ -5,6 +5,7 @@ from .views import *
 router = routers.DefaultRouter()
 router.register(r'basetheme', BaseThemeViewset , basename='basetheme')
 router.register(r'knowladgebase', KnowladgeBaseViewset , basename='knowladgebase')
+router.register(r'questions', FAQViewset , basename='questions')
 
 urlpatterns = [
     path('', include(router.urls)),
