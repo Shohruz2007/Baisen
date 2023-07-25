@@ -185,7 +185,7 @@ class CurrentUserView(generics.RetrieveUpdateDestroyAPIView):
     
     
     def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop('partial', True)
         instance = request.user
         copy_of_data = request.data.copy()
 
