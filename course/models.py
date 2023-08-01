@@ -92,6 +92,6 @@ class RegisterCourseUser(models.Model):
         blank=True,
     )
     proposed_time = models.DateTimeField(null=True, blank=True)
-    completed_themes = models.ManyToManyField(CourseDataTheme)
+    completed_themes = models.ManyToManyField(CourseDataTheme, blank=True)
     is_manager = models.BooleanField(default=False)
     rating = models.IntegerField(null=True, blank=True)

@@ -11,7 +11,7 @@ from .models import (
     CourseDataCategory,
     CourseDataSubCategory,
     CourseDataTheme,
-    CourseThemeCommentView,
+    CourseThemeComment,
     RegisterCourseUser,
 )
 
@@ -86,7 +86,13 @@ class CourseThemeCommentSerializer(serializers.ModelSerializer):
     user = UserBaseInfoSerializer()
 
     class Meta:
-        model = CourseThemeCommentView
+        model = CourseThemeComment
+        fields = ["id", "user", "image", "text", "subcomment"]
+
+class CourseThemeCommentCreateUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CourseThemeComment
         fields = ["id", "user", "image", "text", "subcomment"]
 
 

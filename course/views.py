@@ -21,7 +21,8 @@ class RegisterCourseUserViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         custom_data = request.data.copy()
-        custom_data.update({"user": request.user.id})
+        if not 'user' in custom_data:
+            custom_data.update({"user": request.user.id})
 
         serializer = self.get_serializer(data=custom_data)
         serializer.is_valid(raise_exception=True)
@@ -168,12 +169,13 @@ class CourseThemeTaskViewset(viewsets.ModelViewSet):
 
 class CourseThemeCommentView(viewsets.ModelViewSet):
     queryset = CourseThemeComment.objects.select_related("user").all()
-    serializer_class = CourseThemeCommentSerializer
+    serializer_class = CourseThemeCommentCreateUpdateSerializer
     permission_classes = (IsAuthenticated,)
 
     def create(self, request, *args, **kwargs):
         data_copy = request.data.copy()
         data_copy.update({"user": request.user.id})
+        print(data_copy)
 
         serializer = self.get_serializer(data=data_copy)
         serializer.is_valid(raise_exception=True)
@@ -183,11 +185,3 @@ class CourseThemeCommentView(viewsets.ModelViewSet):
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
 
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def get_success_headers(self, data):
-        try:
-            return {"Location": str(data[api_settings.URL_FIELD_NAME])}
-        except (TypeError, KeyError):
-            return {}
